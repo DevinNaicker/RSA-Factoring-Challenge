@@ -1,18 +1,35 @@
 #!/usr/bin/python3
 from sys import argv
+import math
+
+def is_prime(n):
+    """ Check if a number is prime """
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(math.sqrt(n)) + 1, 2):
+        if n % i == 0:
+            return False
+    return True
 
 with open(argv[1]) as f:
     for line in f:
-        num = int(line)
-        print("{:d}=".format(num), end="")
+        num = int(line.strip())
+        print(f"{num}=", end="")
+        
+        # Check for divisibility by 2
         if num % 2 == 0:
-            print("{}*2".format(num//2))
+            print(f"{num // 2}*2")
             continue
-        for i in range(3, num, 2):
+        
+        # Start checking for factors from 3 upwards
+        for i in range(3, int(math.sqrt(num)) + 1, 2):
             if num % i == 0:
-                factor = num//i
-                for j in range(3, factor, 2):
-                    if factor % j == 0 or i % j == 0:
-                        break
-                print("{}*{}".format(factor, i))
-                break
+                factor = num // i
+                # Ensure both i and factor are prime numbers
+                if is_prime(i) and is_prime(factor):
+                    print(f"{factor}*{i}")
+                    break
